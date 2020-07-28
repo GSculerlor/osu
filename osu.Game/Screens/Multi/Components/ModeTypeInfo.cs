@@ -7,6 +7,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Beatmaps.Drawables;
 using osuTK;
+using osuTK.Graphics;
 
 namespace osu.Game.Screens.Multi.Components
 {
@@ -56,11 +57,14 @@ namespace osu.Game.Screens.Multi.Components
         private void updateBeatmap()
         {
             var item = Playlist.FirstOrDefault();
+            var beatmaps = Playlist.Select(beatmap => beatmap.Beatmap.Value).ToList();
 
             if (item?.Beatmap != null)
             {
                 drawableRuleset.FadeIn(transition_duration);
-                drawableRuleset.Child = new DifficultyIcon(item.Beatmap.Value, item.Ruleset.Value) { Size = new Vector2(height) };
+                drawableRuleset.Child = Playlist.Count > 1
+                    ? new GroupedDifficultyIcon(beatmaps, item.Ruleset.Value, Color4.White) { Size = new Vector2(height) }
+                    : new DifficultyIcon(item.Beatmap.Value, item.Ruleset.Value) { Size = new Vector2(height) };
             }
             else
                 drawableRuleset.FadeOut(transition_duration);

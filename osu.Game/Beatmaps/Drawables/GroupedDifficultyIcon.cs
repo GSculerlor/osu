@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
@@ -19,8 +20,18 @@ namespace osu.Game.Beatmaps.Drawables
     /// </remarks>
     public class GroupedDifficultyIcon : DifficultyIcon
     {
+        private readonly List<BeatmapInfo> beatmaps;
+        private readonly Color4 counterColour;
+
         public GroupedDifficultyIcon(List<BeatmapInfo> beatmaps, RulesetInfo ruleset, Color4 counterColour)
             : base(beatmaps.OrderBy(b => b.StarDifficulty).Last(), ruleset, false)
+        {
+            this.beatmaps = beatmaps;
+            this.counterColour = counterColour;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
         {
             AddInternal(new OsuSpriteText
             {
